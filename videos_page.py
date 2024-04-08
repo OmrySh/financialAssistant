@@ -7,11 +7,6 @@ import recommender
 from utils import search_youtube, load_user_info, update_fields_in_user_info
 
 
-img_compounding_interest = Image.open("images/compound-interest.webp")
-img_inflation = Image.open("images/inflation.jpg")
-img_snp500 = Image.open("images/snp500.jpeg")
-
-
 def update_user_info_by_feedback(username, updated_user_info):
     """Add a new field to an existing user's information in the JSON credentials file."""
     credentials_file_path = "credentials.json"
