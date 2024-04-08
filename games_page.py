@@ -62,7 +62,10 @@ def show_financial_quiz():
     num_present_questions = 3
 
     if 'present_questions' not in user_info:
-        update_fields_in_user_info(username, {'present_questions': []})
+        update_fields_in_user_info(username, {'present_questions': [],
+                                              'right_questions': [],
+                                              'wrong_questions': []})
+        user_info = load_user_info(username)
 
     while len(user_info['present_questions']) < num_present_questions:
         print("len in small")

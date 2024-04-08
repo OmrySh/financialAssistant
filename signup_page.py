@@ -6,7 +6,7 @@ import json
 
 def add_credentials(username, password, gender, birthdate, average_wage, have_savings, financial_knowledge,
                     investment_experience, financial_goals, risk_tolerance, emergency_fund, debt_level,
-                    income_stability, expense_tracking, insurance_coverage, investment_understanding, finance_courses,
+                    income_stability, expense_tracking, investment_understanding, finance_courses,
                     financial_news, retirement_age, wealth_building_priority):
     """Add or update a user's credentials and details in a JSON file."""
     # The path to your JSON file
@@ -34,7 +34,6 @@ def add_credentials(username, password, gender, birthdate, average_wage, have_sa
         "debt_level": debt_level,
         "income_stability": income_stability,
         "expense_tracking": expense_tracking,
-        "insurance_coverage": insurance_coverage,
         "investment_understanding": investment_understanding,
         "finance_courses": finance_courses,
         "financial_news": financial_news,
@@ -106,9 +105,9 @@ def show():
         expense_tracking = st.radio("Do you regularly track your expenses?",
                                     ["Yes, meticulously", "Yes, but not in detail", "Rarely", "No"],
                                     key="expense_tracking")
-        insurance_coverage = st.multiselect("What types of insurance do you currently have?",
-                                            ["Health", "Life", "Property", "None"],
-                                            key="insurance_coverage")
+        # insurance_coverage = st.multiselect("What types of insurance do you currently have?",
+        #                                     ["Health", "Life", "Property", "None"],
+        #                                     key="insurance_coverage")
 
         # Additional Financial Knowledge Questions
         investment_understanding = st.selectbox(
@@ -132,7 +131,7 @@ def show():
                                                 key="wealth_building_priority")
         investment_experience = st.selectbox("What is your investment experience?",
             ["None", "Limited", "Moderate", "Experienced"], key="signup_investment_experience")
-        financial_goals = st.multiselect("What are your primary financial goals?",
+        financial_goals = st.selectbox("What is your primary financial goal?",
             ["Saving for retirement", "Buying a home", "Building an emergency fund", "Saving for education", "Other"],
             key="signup_financial_goals")
         risk_tolerance = st.radio("What is your risk tolerance?",
@@ -144,7 +143,7 @@ def show():
         if not all([username, password, gender != gender_default_message, birthdate, average_wage, have_savings,
                     financial_knowledge != financial_knowledge_default_message, investment_experience, financial_goals,
                     risk_tolerance,
-                    emergency_fund, debt_level, income_stability, expense_tracking, insurance_coverage,
+                    emergency_fund, debt_level, income_stability, expense_tracking,
                     investment_understanding,
                     finance_courses, financial_news, retirement_age, wealth_building_priority]):
             st.error("Please answer all questions.")
@@ -152,7 +151,7 @@ def show():
             # Extend the function to include additional details
             add_credentials(username, password, gender, birthdate, average_wage, have_savings,
                             financial_knowledge, investment_experience, financial_goals, risk_tolerance,
-                            emergency_fund, debt_level, income_stability, expense_tracking, insurance_coverage,
+                            emergency_fund, debt_level, income_stability, expense_tracking,
                             investment_understanding, finance_courses, financial_news, retirement_age,
                             wealth_building_priority)
             st.success("Signup successful. Please log in.")

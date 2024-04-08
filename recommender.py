@@ -7,9 +7,9 @@ client = OpenAI(api_key='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')
 def get_video_prompt(user_info):
     prompt = f" \
                  please recommend a topic or a term for a video to be learned by the user based on the user’s information:\
-                    Financial education level: {user_info['education_level']}\
-                    Financial Interest Topic: {user_info['interest_topic']}\
-                    Spending Behaviour: {user_info['spending_behavior']}\
+                    Financial education level: {user_info['financial_literacy_level']}\
+                    Financial Interest Topic: {user_info['financial_goals_category']}\
+                    Spending Behaviour: {user_info['financial_behavior']}\
                     current displayed videos: {user_info['present_videos']}\
                     Previously Watched and liked videos:{user_info['liked_video']}\
                     Previously Watched and disliked videos:{user_info['unliked_video']}\
@@ -18,7 +18,7 @@ def get_video_prompt(user_info):
                     Please provide only the topic and a description for the video in to 2 sentences:\
                     1-sentence of motivation to learn why to learn the topic:\
                     1-sentence of explanation for the user why you chose this topic for him.\
-                    The format should be (please don't add any additional words):\
+                    The format should be a tuple with 2 strings (please don't add any additional words):\
                     (“topic”, “motivation and explanation”)\
                     "
     return prompt
@@ -41,9 +41,9 @@ def get_question_prompt(user_info):
     prompt = f""" \
                     please recommend a question on a topics or a terms for a quiz to be answered by the user based on\
                     the user’s information, please don't repeat previously asked question:\
-                    Financial education level: {user_info['education_level']}\
-                    Financial Interest Topic: {user_info['interest_topic']}\
-                    Spending Behaviour: {user_info['spending_behavior']}\
+                    Financial education level: {user_info['financial_literacy_level']}\
+                    Financial Interest Topic: {user_info['financial_goals_category']}\
+                    Spending Behaviour: {user_info['financial_behavior']}\
                     current displayed videos: {user_info['present_videos']}\
                     Previously Watched and liked videos:{user_info['liked_video']}\
                     Previously Watched and disliked videos:{user_info['unliked_video']}\
@@ -88,9 +88,9 @@ def get_relevant_news_prompt(user_info, news_titles):
     prompt = f""" \
                     please leave the news titles relevant to the user based on the user’s information, take into 
                     consideration his level, what he likes. Leave those who you think he likes and those you think he may learn from:\
-                    Financial education level: {user_info['education_level']}\
-                    Financial Interest Topic: {user_info['interest_topic']}\
-                    Spending Behaviour: {user_info['spending_behavior']}\
+                    Financial education level: {user_info['financial_literacy_level']}\
+                    Financial Goal: {user_info['financial_goals_category']}\
+                    Spending Behaviour: {user_info['financial_behavior']}\
                     current displayed videos: {user_info['present_videos']}\
                     Previously Watched and liked videos:{user_info['liked_video']}\
                     Previously Watched and disliked videos:{user_info['unliked_video']}\

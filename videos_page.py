@@ -122,7 +122,11 @@ def show_recommended_videos():
     user_info = load_user_info(user_name)
 
     if 'present_videos' not in user_info:
-        user_info['present_videos'] = []
+        update_fields_in_user_info(user_name, {'present_videos': [],
+                                               'liked_video': [],
+                                               'unliked_video': []})
+        user_info = load_user_info(user_name)
+
 
     while len(user_info['present_videos']) < num_presented_videos:
         print("len in small")

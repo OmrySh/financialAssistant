@@ -15,10 +15,10 @@ def get_monthly_spending(expenses_path):
     df['year_month'] = df['date'].dt.strftime('%Y-%m')
 
     # Group by 'year_month' and 'category', then sum the 'amount_spent'
-    monthly_spending_sum = df.groupby(['year_month', 'store_name'])['amount_spent'].sum().reset_index()
+    monthly_spending_sum = df.groupby(['year_month', 'category'])['amount_spent'].sum().reset_index()
 
     # Now calculate the average monthly spending for each category
-    average_monthly_spending = monthly_spending_sum.groupby('store_name')['amount_spent'].mean().reset_index()
+    average_monthly_spending = monthly_spending_sum.groupby('category')['amount_spent'].mean().reset_index()
     average_monthly_spending['amount_spent'] = average_monthly_spending['amount_spent'].round(0)
 
     return average_monthly_spending
@@ -43,7 +43,6 @@ def show():
 
     expenses_path = user_info['expenses_path']
     user_wage = user_info['average_wage']
-    user_wage = 3000
 
     average_monthly_spending = get_monthly_spending(expenses_path)
 
@@ -53,7 +52,7 @@ def show():
         # Display and allow adjustment of spending by category
         adjusted_spending = {}
         for idx, row in average_monthly_spending.iterrows():
-            category = row['store_name']
+            category = row['category']
             avg_spend = row['amount_spent']
             adjusted_spend = st.slider(f"Adjust spending on {category}", 0, int(avg_spend * 2), int(avg_spend))
             adjusted_spending[category] = adjusted_spend

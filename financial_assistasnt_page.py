@@ -10,6 +10,7 @@ from utils import update_fields_in_user_info, load_user_info, load_lottieurl
 import model
 import json
 import os
+from model import Model
 
 
 def save_uploaded_file(uploaded_file, username):
@@ -37,7 +38,7 @@ def show():
     username = st.session_state['logged_username']
     lottie_coding = load_lottieurl("https://lottie.host/fe99b3f0-ef70-457b-ac24-9520f5ecc05e/yihgioLLyl.json")
 
-    header_col, lottie_col, _ = st.columns((2,1,5))
+    header_col, lottie_col, _ = st.columns((2, 1, 5))
     with header_col:
         st.header(f"Hi There {username}!")
     with lottie_col:
@@ -49,7 +50,19 @@ def show():
         uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
         if uploaded_file is not None:
             file_path = save_uploaded_file(uploaded_file, username)
-            update_fields_in_user_info(username, {'expenses_path': file_path})
+            model_prediction = model.run_model(username)
+            update_fields_in_user_info(username, {'expenses_path': file_path,
+                                                  'present_videos': [],
+                                                  'liked_video': [],
+                                                  'unliked_video': [],
+                                                  'present_questions': [],
+                                                  'right_questions': [],
+                                                  'wrong_questions': []
+                                                  }
+                                       )
+            update_fields_in_user_info(username, model_prediction)
+            st.rerun()
+
     # if uploaded_file is not None:
     else:
         if 'show_content' not in st.session_state:
@@ -67,7 +80,7 @@ def show():
         </style>
         """, unsafe_allow_html=True)
 
-        buttons_col, content_col = st.columns((1,10))
+        buttons_col, content_col = st.columns((1, 10))
         if st.sidebar.button("Recommended Videos"):
             st.session_state['show_content'] = 'videos'
 
@@ -81,10 +94,11 @@ def show():
             st.session_state['show_content'] = 'News'
 
         uploaded_file = st.sidebar.file_uploader("Upload Your Updated Expenses", type="csv")
-
-            # if st.button("Expenses Analysis"):
-            #     st.session_state['show_content'] = 'Analysis'
-
+        if uploaded_file is not None:
+            file_path = save_uploaded_file(uploaded_file, username)
+            update_fields_in_user_info(username, {'expenses_path': file_path})
+            model_prediction = model.run_model(username)
+            update_fields_in_user_info(username, model_prediction)
 
         if st.session_state['show_content'] == 'videos' or st.session_state['feedback_received']:
             st.session_state['feedback_received'] = False
@@ -101,12 +115,6 @@ def show():
 
         elif st.session_state['show_content'] == 'Simulator':
             simulator_page.show()
-
-    if uploaded_file is not None:
-        file_path = save_uploaded_file(uploaded_file, username)
-        update_fields_in_user_info(username, {'expenses_path': file_path})
-    model_prediction = model.get_financial_level(username)
-    update_fields_in_user_info(username, model_prediction)
 
     # ---- CONTACT ----
     with st.container():
