@@ -1,0 +1,15 @@
+scikit-learn
+pickle
+pandas
+numpy
+pillow
+requests
+streamlit
+openai
+matplotlib
+ast
+feedparser
+sentence-transformers
+streamlit-lottie
+scipy
+youtube-search-python
