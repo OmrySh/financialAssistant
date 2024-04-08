@@ -1,8 +1,7 @@
 import ast
-
+import streamlit as st
 from openai import OpenAI
-client = OpenAI(api_key='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')
-
+client = OpenAI(api_key=st.secrets["gpt_api_key"])
 
 def get_video_prompt(user_info):
     prompt = f" \
