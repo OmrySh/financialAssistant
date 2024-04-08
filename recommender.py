@@ -27,7 +27,7 @@ def get_new_video(user_info):
 
     prompt = get_video_prompt(user_info)
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a financial guide in an web app"},
             {"role": "user", "content": prompt}
