@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils import load_user_info
 import numpy as np
+import os
 
 
 def get_monthly_spending(expenses_path):
@@ -40,7 +41,8 @@ def show():
     username = st.session_state['logged_username']
     user_info = load_user_info(username)
 
-    expenses_path = user_info['expenses_path']
+    # expenses_path = user_info['expenses_path']
+    expenses_path = os.path.join('expenses_data', f'{username}_expenses.csv')
     user_wage = user_info['average_wage']
 
     average_monthly_spending = get_monthly_spending(expenses_path)
