@@ -5,6 +5,18 @@ from utils import navigate_to, load_lottieurl
 lottie_coding = load_lottieurl("https://lottie.host/fe99b3f0-ef70-457b-ac24-9520f5ecc05e/yihgioLLyl.json")
 
 def show():
+    import os
+
+    # Print the current working directory
+    st.write("Current working directory:", os.getcwd())
+
+    # List files in the expected directory
+    expenses_dir = 'expenses_data'
+    if os.path.isdir(expenses_dir):
+        st.write("Files in expenses_data:", os.listdir(expenses_dir))
+    else:
+        st.write(f"Directory {expenses_dir} not found")
+
     # ---- HEADER SECTION ----
     with st.container():
         st.subheader("Welcome to EconoMe - Your Financial Assistant :wave:")
@@ -23,7 +35,7 @@ def show():
             st.write("##")
             st.write(
                 """
-                - EconoMe uses your financial data to provide you with personalized videos and questions.\n
+                - EconoMe uses your financial data to provide you with personalized videos questions, news and simulator.\n
                 - EconoMe also helps you understand the basics of personal finance and investing using videos and games.\n
                 - EconoMe is designed to be easy to use and accessible to everyone."""
             )
