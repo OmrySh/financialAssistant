@@ -70,10 +70,10 @@ def show():
         additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0)
         for i in range(additional_stocks):
             with stock_col:
-                new_stock = st.text_input("Additional Instrument", "", key=f"stock_{i}")
+                new_stock = st.text_input(f"Additional Instrument {i+1}", "", key=f"stock_{i}")
                 stocks.append(new_stock)
             with weight_col:
-                new_weight = st.text_input("Additional Instrument", "", key=f"weight_{i}")
+                new_weight = st.number_input(f"Weight(%) {i+1}", min_value=0, max_value=100, value=0, key=f"weight_{i}")
                 weights.append(new_weight)
 
         if is_stock_symbol_valid(input_stock):
