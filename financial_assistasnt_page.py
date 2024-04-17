@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 import expenses_anlysis_page
 import games_page
+import history_simulator_page
 import news_page
 import simulator_page
 import videos_page
@@ -93,6 +94,9 @@ def show():
         if st.sidebar.button("News"):
             st.session_state['show_content'] = 'News'
 
+        if st.sidebar.button("History Simulator"):
+            st.session_state['show_content'] = 'History_Simulator'
+
         uploaded_file = st.sidebar.file_uploader("Upload Your Updated Expenses", type="csv")
         if uploaded_file is not None:
             file_path = save_uploaded_file(uploaded_file, username)
@@ -115,6 +119,9 @@ def show():
 
         elif st.session_state['show_content'] == 'Simulator':
             simulator_page.show()
+
+        elif st.session_state['show_content'] == 'History_Simulator':
+            history_simulator_page.show()
 
     # ---- CONTACT ----
     with st.container():

@@ -5,53 +5,43 @@ import numpy as np
 import yfinance as yf
 import os
 
+def calc_investment_graph(initial_investment, monthly_savings, start_year, stock):
+    start_date_str = str(start_year) + "-01-01"
+    stock_df = yf.download(stock, start=start_date_str, interval='1mo')
+    current_savings = initial_investment
+    investment = [current_savings]
+    prev_close = stock_df['Close'][0]
+    for i in range(1, len(stock_df['Close'])):
+        current_close = stock_df['Close'][i]
+        monthly_return = (current_close - prev_close) / prev_close
+        current_savings += current_savings * monthly_return + monthly_savings
+        investment.append(current_savings)
+        prev_close = current_close
+
+    return stock_df.index, investment
+
 
 def show():
     # Load the expenses data
     username = st.session_state['logged_username']
     user_info = load_user_info(username)
 
-    # expenses_path = user_info['expenses_path']
-    expenses_path = os.path.join('expenses_data', f'{username}_expenses.csv')
-    user_wage = user_info['average_wage']
+    parameters_col, graph_col = st.columns((1,3))
+    with parameters_col:
+        input_initial_investment = st.number_input("Adjust Initial Investment", min_value=0, key="initial_investment", value=0)
+        input_monthly_savings = st.number_input("Adjust Monthly Savings", min_value=0, key="savings_amount", value=1000)
+        input_start_year = st.number_input("Adjust Start Year", min_value=1990, key="start_year", value=2010)
+        input_stock = st.text_input("Investment Instrument", "SPY")
 
-    average_monthly_spending = get_monthly_spending(expenses_path)
-
-    spending_col, savings_col = st.columns((1,3))
-    with spending_col:
-        input_wage = st.number_input("Adjust Wage", min_value=0, key="wage_simulator", value=user_wage)
-        # Display and allow adjustment of spending by category
-        adjusted_spending = {}
-        for idx, row in average_monthly_spending.iterrows():
-            category = row['category']
-            avg_spend = row['amount_spent']
-            adjusted_spend = st.slider(f"Adjust spending on {category}", 0, int(avg_spend * 2), int(avg_spend))
-            adjusted_spending[category] = adjusted_spend
-
-        total_spending = sum(adjusted_spending.values())
-        monthly_savings = input_wage - total_spending
-
-        st.write(f"Total Monthly Spending: ${total_spending}")
-        st.write(f"Estimated Monthly Savings: ${monthly_savings}")
-
-    with savings_col:
-        # Parameters for the simulation
-        years = st.slider(f"Adjust Years of Saving", 1, 80, 10)
-        interest_rate = st.slider(f"Adjust Yearly Interest Rate (%)", 0, 50, 8)
-        interest_rate /= 100
-        monthly_interest_rate = (1 + interest_rate) ** (1/12) - 1
-
-        # Calculate monthly savings growth
-        num_months = years * 12
-        months = np.arange(num_months + 1)
-        investment = calc_investment_graph(monthly_savings, years * 12, monthly_interest_rate)
-        saving_only = [monthly_savings * (i + 1) for i in range(num_months+1)]
+    with graph_col:
+        dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings, input_start_year, input_stock)
 
         total_investment = "{:,}".format(round(investment[-1]))
-        total_saving = "{:,}".format(saving_only[-1])
-        money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
-        st.write(f"Investment Value After {years} Years: {total_investment}")
-        st.write(f"Money Invested During {years} Years: {total_saving}")
-        st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
-        savings_df = pd.DataFrame({'Date': months, 'Savings Only': saving_only, 'Investment': investment})
-        st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
+        # total_saving = "{:,}".format(saving_only[-1])
+        # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
+        st.write(f"Investment Value: {total_investment}")
+        # st.write(f"Money Invested During {years} Years: {total_saving}")
+        # st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
+        savings_df = pd.DataFrame({'Date': dates, 'Savings Only': investment, 'Investment': investment})
+        # st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
+        st.line_chart(savings_df, x='Date', y=["Investment"], height=600)
