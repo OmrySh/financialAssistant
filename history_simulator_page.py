@@ -67,7 +67,7 @@ def show():
             input_weight = st.number_input("Weight(%)", min_value=0, max_value=100, value=100, key="first_weight")
             weights.append(input_weight)
 
-        additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0)
+        additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0, key="add")
         for i in range(additional_stocks):
             with stock_col:
                 new_stock = st.text_input(f"Additional Instrument {i+1}", "", key=f"stock_{i}")
