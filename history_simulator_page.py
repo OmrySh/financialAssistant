@@ -53,8 +53,10 @@ def show():
             st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
 
     with graph_col:
+        print(st.session_state['history_graph']['Investment'][-1])
+        total_investment = "{:,}".format(round(st.session_state['history_graph']
+                                               ['Investment'][-1]))
 
-        total_investment = "{:,}".format(round(st.session_state['history_graph']['Investment'][-1]))
         # total_saving = "{:,}".format(saving_only[-1])
         # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
         st.write(f"Investment Value: {total_investment}")
