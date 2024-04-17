@@ -54,7 +54,7 @@ def show():
 
     with graph_col:
 
-        total_investment = "{:,}".format(round(st.session_state['history_graph']['Investment']))
+        total_investment = "{:,}".format(round(st.session_state['history_graph']['Investment'][-1]))
         # total_saving = "{:,}".format(saving_only[-1])
         # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
         st.write(f"Investment Value: {total_investment}")
