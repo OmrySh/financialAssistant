@@ -33,6 +33,20 @@ def is_stock_symbol_valid(symbol):
         return False
 
 
+def calc_portfolio_performance(stocks, weights, initial_investment, monthly_savings, start_year):
+    performance = None
+    for stock, weight in zip(stocks, weights):
+        if stock:
+            dates, stock_performance = calc_investment_graph(initial_investment, monthly_savings, start_year, stock)
+            if performance is None:
+                performance = [weight / 100 * st_perf for st_perf in stock_performance]
+            else:
+                performance = [port_perf + weight / 100 * st_perf for port_perf, st_perf in zip(performance, stock_performance)]
+
+    return dates, performance
+
+
+
 def show():
     # Load the expenses data
     username = st.session_state['logged_username']
@@ -43,11 +57,30 @@ def show():
         input_initial_investment = st.number_input("Initial Investment", min_value=0, key="initial_investment", value=0)
         input_monthly_savings = st.number_input("Monthly Savings", min_value=0, key="savings_amount", value=1000)
         input_start_year = st.number_input("Start Year", min_value=1990, key="start_year", value=2010)
-        input_stock = st.text_input("Investment Instrument", "SPY")
+        stock_col, weight_col = st.columns((3,1))
+        stocks = []
+        weights = []
+        with stock_col:
+            input_stock = st.text_input("Investment Instrument", "SPY")
+            stocks.append(input_stock)
+        with weight_col:
+            input_weight = st.number_input("Weight(%)", min_value=0, max_value=100, value=100)
+            weights.append(input_weight)
+
+        additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0)
+        for i in range(additional_stocks):
+            with stock_col:
+                new_stock = st.text_input("Additional Instrument", "")
+                stocks.append(new_stock)
+            with weight_col:
+                new_weight = st.text_input("Additional Instrument", "")
+                weights.append(new_weight)
 
         if is_stock_symbol_valid(input_stock):
-            dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
-                                                      input_start_year, input_stock)
+            dates, investment = calc_portfolio_performance(stocks, weights, input_initial_investment,
+                                                           input_monthly_savings, input_start_year)
+            # dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
+            #                                           input_start_year, input_stock)
             st.session_state['history_graph'] = {'Date': dates, 'Savings Only': investment, 'Investment': investment}
         else:
             st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
