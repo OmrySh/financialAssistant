@@ -21,6 +21,18 @@ def calc_investment_graph(initial_investment, monthly_savings, start_year, stock
     return stock_df.index, investment
 
 
+def is_stock_symbol_valid(symbol):
+    """Check if the stock symbol is valid by attempting to fetch its info."""
+    stock_info = yf.Ticker(symbol)
+    try:
+        # Attempt to fetch the short name to determine if symbol is valid
+        _ = stock_info.info['shortName']
+        return True
+    except KeyError:
+        # If 'shortName' is not in the info, the symbol might be invalid or delisted
+        return False
+
+
 def show():
     # Load the expenses data
     username = st.session_state['logged_username']
@@ -28,13 +40,18 @@ def show():
 
     parameters_col, graph_col = st.columns((1,3))
     with parameters_col:
-        input_initial_investment = st.number_input("Adjust Initial Investment", min_value=0, key="initial_investment", value=0)
-        input_monthly_savings = st.number_input("Adjust Monthly Savings", min_value=0, key="savings_amount", value=1000)
-        input_start_year = st.number_input("Adjust Start Year", min_value=1990, key="start_year", value=2010)
+        input_initial_investment = st.number_input("Initial Investment", min_value=0, key="initial_investment", value=0)
+        input_monthly_savings = st.number_input("Monthly Savings", min_value=0, key="savings_amount", value=1000)
+        input_start_year = st.number_input("Start Year", min_value=1990, key="start_year", value=2010)
         input_stock = st.text_input("Investment Instrument", "SPY")
 
+        if is_stock_symbol_valid(input_stock):
+            dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
+                                                      input_start_year, input_stock)
+        else:
+            st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
+
     with graph_col:
-        dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings, input_start_year, input_stock)
 
         total_investment = "{:,}".format(round(investment[-1]))
         # total_saving = "{:,}".format(saving_only[-1])
