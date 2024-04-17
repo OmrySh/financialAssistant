@@ -37,7 +37,11 @@ def show():
     num_articles = 20
     num_relevant = 5
     num_search = 2
-    all_entries = feed.entries[:num_articles]
+    all_entries = []
+    for entry in feed.entries:
+        if 'summary' in entry:
+            all_entries.append(entry)
+    all_entries = all_entries[:num_articles]
     news_titles = [entry.summary for entry in all_entries]
     if 'relevant_news' not in st.session_state:
         username = st.session_state['logged_username']
