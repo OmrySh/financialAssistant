@@ -11,3 +11,4 @@ sentence-transformers
 streamlit-lottie
 scipy
 youtube-search-python
+yfinance
