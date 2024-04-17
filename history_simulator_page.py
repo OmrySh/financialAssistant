@@ -48,6 +48,7 @@ def show():
         if is_stock_symbol_valid(input_stock):
             dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
                                                       input_start_year, input_stock)
+            st.session_state['history_graph'] = {'Date': dates, 'Savings Only': investment, 'Investment': investment}
         else:
             st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
 
@@ -59,6 +60,8 @@ def show():
         st.write(f"Investment Value: {total_investment}")
         # st.write(f"Money Invested During {years} Years: {total_saving}")
         # st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
-        savings_df = pd.DataFrame({'Date': dates, 'Savings Only': investment, 'Investment': investment})
+        savings_df = pd.DataFrame({'Date': dates,
+                                   'Savings Only': st.session_state['history_graph']['Date'],
+                                   'Investment': st.session_state['history_graph']['Investment']})
         # st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
         st.line_chart(savings_df, x='Date', y=["Investment"], height=600)
