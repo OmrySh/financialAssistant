@@ -61,19 +61,19 @@ def show():
         stocks = []
         weights = []
         with stock_col:
-            input_stock = st.text_input("Investment Instrument", "SPY")
+            input_stock = st.text_input("Investment Instrument", "SPY", key="first_stock")
             stocks.append(input_stock)
         with weight_col:
-            input_weight = st.number_input("Weight(%)", min_value=0, max_value=100, value=100)
+            input_weight = st.number_input("Weight(%)", min_value=0, max_value=100, value=100, key="first_weight")
             weights.append(input_weight)
 
         additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0)
         for i in range(additional_stocks):
             with stock_col:
-                new_stock = st.text_input("Additional Instrument", "")
+                new_stock = st.text_input("Additional Instrument", "", key=f"stock_{i}")
                 stocks.append(new_stock)
             with weight_col:
-                new_weight = st.text_input("Additional Instrument", "")
+                new_weight = st.text_input("Additional Instrument", "", key=f"weight_{i}")
                 weights.append(new_weight)
 
         if is_stock_symbol_valid(input_stock):
