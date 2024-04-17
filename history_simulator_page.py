@@ -62,8 +62,8 @@ def show():
         st.write(f"Investment Value: {total_investment}")
         # st.write(f"Money Invested During {years} Years: {total_saving}")
         # st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
-        savings_df = pd.DataFrame({'Date': dates,
-                                   'Savings Only': st.session_state['history_graph']['Date'],
+        savings_df = pd.DataFrame({'Date': st.session_state['history_graph']['Date'],
+                                   'Savings Only': st.session_state['history_graph']['Investment'],
                                    'Investment': st.session_state['history_graph']['Investment']})
         # st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
         st.line_chart(savings_df, x='Date', y=["Investment"], height=600)
