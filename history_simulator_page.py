@@ -57,35 +57,45 @@ def show():
         input_initial_investment = st.number_input("Initial Investment", min_value=0, key="initial_investment", value=0)
         input_monthly_savings = st.number_input("Monthly Savings", min_value=0, key="savings_amount", value=1000)
         input_start_year = st.number_input("Start Year", min_value=1990, key="start_year", value=2010)
-        with st.expander(f"### First Portfolio"):
-            stock_col, weight_col = st.columns((3,1))
-            stocks = []
-            weights = []
-            with stock_col:
-                input_stock = st.text_input("Investment Instrument", "SPY", key="first_stock")
-                stocks.append(input_stock)
-            with weight_col:
-                input_weight = st.number_input("Weight(%)", min_value=0, max_value=100, value=100, key="first_weight")
-                weights.append(input_weight)
-
-            additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0, key="add")
-            for i in range(additional_stocks):
+        portfolios_number = st.number_input("Number of Portfolios", min_value=0, max_value=10, value=1,
+                                            key="portfolios_num")
+        for portfolio in portfolios_number:
+            with st.expander(f"### Portfolio {portfolio}"):
                 stock_col, weight_col = st.columns((3, 1))
+                stocks = []
+                weights = []
                 with stock_col:
-                    new_stock = st.text_input(f"Additional Instrument {i+1}", "", key=f"stock_{i}")
-                    stocks.append(new_stock)
+                    input_stock = st.text_input("Investment Instrument", "SPY", key=f"first_stock_{portfolio}")
+                    stocks.append(input_stock)
                 with weight_col:
-                    new_weight = st.number_input(f"Weight(%) {i+1}", min_value=0, max_value=100, value=0, key=f"weight_{i}")
-                    weights.append(new_weight)
+                    input_weight = st.number_input("Weight(%)", min_value=0, max_value=100, value=100,
+                                                   key=f"first_weight_{portfolio}")
+                    weights.append(input_weight)
 
-        if is_stock_symbol_valid(input_stock):
-            dates, investment = calc_portfolio_performance(stocks, weights, input_initial_investment,
-                                                           input_monthly_savings, input_start_year)
-            # dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
-            #                                           input_start_year, input_stock)
-            st.session_state['history_graph'] = {'Date': dates, 'Savings Only': investment, 'Investment': investment}
-        else:
-            st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
+                additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10,
+                                                    value=0, key=f"add_{portfolio}")
+                for i in range(additional_stocks):
+                    stock_col, weight_col = st.columns((3, 1))
+                    with stock_col:
+                        new_stock = st.text_input(f"Additional Instrument {i+1}", "", key=f"stock_{i}_{portfolio}")
+                        stocks.append(new_stock)
+                    with weight_col:
+                        new_weight = st.number_input(f"Weight(%) {i+1}", min_value=0, max_value=100, value=0,
+                                                     key=f"weight_{i}_{portfolio}")
+                        weights.append(new_weight)
+
+                if is_stock_symbol_valid(input_stock):
+                    dates, investment = calc_portfolio_performance(stocks, weights, input_initial_investment,
+                                                                   input_monthly_savings, input_start_year)
+                    # dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
+                    #                                           input_start_year, input_stock)
+                    if 'history_graph' not in st.session_state:
+                        st.session_state['history_graph'] = {'Date': dates, 'Savings_Only': investment,
+                                                             f'portfolio_{portfolio}': investment}
+                    else:
+                        st.session_state['history_graph'][f'portfolio_{portfolio}'] = investment
+                else:
+                    st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
 
     with graph_col:
         print(st.session_state['history_graph']['Investment'][-1])
@@ -97,8 +107,13 @@ def show():
         st.write(f"Investment Value: {total_investment}")
         # st.write(f"Money Invested During {years} Years: {total_saving}")
         # st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
-        savings_df = pd.DataFrame({'Date': st.session_state['history_graph']['Date'],
-                                   'Savings Only': st.session_state['history_graph']['Investment'],
-                                   'Investment': st.session_state['history_graph']['Investment']})
+        # savings_df = pd.DataFrame({'Date': st.session_state['history_graph']['Date'],
+        #                            'Savings_Only': st.session_state['history_graph']['Investment'],
+        #                            'Investment': st.session_state['history_graph']['Investment']})
+        savings_dict = {}
+        for key in st.session_state['history_graph']:
+            savings_dict[key] = st.session_state['history_graph'][key]
+        savings_df = pd.DataFrame(savings_dict)
+
         # st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
-        st.line_chart(savings_df, x='Date', y=["Investment"], height=600)
+        st.line_chart(savings_df, x='Date', y=[f'portfolio_{portfolio}' for portfolio in portfolios_number], height=600)
