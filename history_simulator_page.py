@@ -10,9 +10,10 @@ def calc_investment_graph(initial_investment, monthly_savings, start_year, stock
     stock_df = yf.download(stock, start=start_date_str, interval='1mo')
     current_savings = initial_investment
     investment = [current_savings]
-    prev_close = stock_df['Close'][0]
-    for i in range(1, len(stock_df['Close'])):
-        current_close = stock_df['Close'][i]
+    stock_close = np.array(stock_df['Close'])
+    prev_close = stock_close[0]
+    for i in range(1, len(stock_close)):
+        current_close = stock_close[i]
         monthly_return = (current_close - prev_close) / prev_close
         current_savings += current_savings * monthly_return + monthly_savings
         investment.append(current_savings)
