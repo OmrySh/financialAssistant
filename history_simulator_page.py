@@ -99,13 +99,13 @@ def show():
                     st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
 
     with graph_col:
-        print(st.session_state['history_graph']['Investment'][-1])
-        total_investment = "{:,}".format(round(st.session_state['history_graph']
-                                               ['Investment'][-1]))
+        for portfolio in range(portfolios_number):
+            total_investment = "{:,}".format(round(st.session_state['history_graph']
+                                                   [f'portfolio_{portfolio}'][-1]))
 
-        # total_saving = "{:,}".format(saving_only[-1])
-        # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
-        st.write(f"Investment Value: {total_investment}")
+            # total_saving = "{:,}".format(saving_only[-1])
+            # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
+            st.write(f"portfolio_{portfolio} Value: {total_investment}")
         # st.write(f"Money Invested During {years} Years: {total_saving}")
         # st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
         # savings_df = pd.DataFrame({'Date': st.session_state['history_graph']['Date'],
@@ -117,4 +117,4 @@ def show():
         savings_df = pd.DataFrame(savings_dict)
 
         # st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
-        st.line_chart(savings_df, x='Date', y=[f'portfolio_{portfolio}' for portfolio in portfolios_number], height=600)
+        st.line_chart(savings_df, x='Date', y=[f'portfolio_{portfolio}' for portfolio in range(portfolios_number)], height=600)
