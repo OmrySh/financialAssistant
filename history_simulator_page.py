@@ -57,7 +57,7 @@ def show():
         input_initial_investment = st.number_input("Initial Investment", min_value=0, key="initial_investment", value=0)
         input_monthly_savings = st.number_input("Monthly Savings", min_value=0, key="savings_amount", value=1000)
         input_start_year = st.number_input("Start Year", min_value=1990, key="start_year", value=2010)
-        stock_col, weight_col = st.columns((3,1), key="first_col")
+        stock_col, weight_col = st.columns((3,1))
         stocks = []
         weights = []
         with stock_col:
@@ -69,7 +69,7 @@ def show():
 
         additional_stocks = st.number_input("Number of Additional Instruments", min_value=0, max_value=10, value=0, key="add")
         for i in range(additional_stocks):
-            stock_col, weight_col = st.columns((3, 1), key=f"cols_{i}")
+            stock_col, weight_col = st.columns((3, 1))
             with stock_col:
                 new_stock = st.text_input(f"Additional Instrument {i+1}", "", key=f"stock_{i}")
                 stocks.append(new_stock)
