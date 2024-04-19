@@ -60,7 +60,7 @@ def show():
         input_start_year = st.number_input("Start Year", min_value=1990, key="start_year", value=2010)
         portfolios_number = st.number_input("Number of Portfolios", min_value=0, max_value=10, value=1,
                                             key="portfolios_num")
-        for portfolio in portfolios_number:
+        for portfolio in range(portfolios_number):
             with st.expander(f"### Portfolio {portfolio}"):
                 stock_col, weight_col = st.columns((3, 1))
                 stocks = []
