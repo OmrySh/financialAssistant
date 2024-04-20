@@ -34,7 +34,7 @@ def show():
     """, unsafe_allow_html=True)
 
     count = 0
-    num_articles = 10
+    num_articles = 5
     num_relevant = 5
     num_search = 2
     all_entries = []

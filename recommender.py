@@ -119,7 +119,7 @@ def create_audio_file(news_titles, news_summaries):
 
     response = client.audio.speech.create(
         model="tts-1",
-        voice="alloy",
+        voice="echo",
         input=news_str,
     )
 
