@@ -34,7 +34,7 @@ def show():
     """, unsafe_allow_html=True)
 
     count = 0
-    num_articles = 20
+    num_articles = 10
     num_relevant = 5
     num_search = 2
     all_entries = []
@@ -43,7 +43,13 @@ def show():
             all_entries.append(entry)
     all_entries = all_entries[:num_articles]
     news_titles = [entry.summary for entry in all_entries]
-    if 'relevant_news' not in st.session_state:
+
+    recommender.create_audio_file(news_titles)
+    st.audio("news.mp3", format='audio/mp3')
+
+
+    show_relevant_news = False
+    if 'relevant_news' not in st.session_state and show_relevant_news:
         username = st.session_state['logged_username']
         user_info = load_user_info(username)
         list_str = recommender.get_relevant_news(user_info, news_titles)
@@ -65,7 +71,7 @@ def show():
     with search_col:
         query = st.text_input('Search The News', key="search", placeholder="search")
     with checkbox_col:
-        show_relevant_news = st.checkbox('Show Recommended News', value=True)
+        show_relevant_news = st.checkbox('Show Recommended News', value=False)
 
     if query:
         query_vector = bert.get_representation(query)

@@ -26,7 +26,7 @@ def get_new_video(user_info):
 
     prompt = get_video_prompt(user_info)
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a financial guide in an web app"},
             {"role": "user", "content": prompt}
@@ -110,3 +110,17 @@ def get_relevant_news(user_info, news_titles):
         ]
     )
     return response.choices[0].message.content
+
+
+def create_audio_file(news):
+    news_str = ""
+    for n in news:
+        news_str += " " + n
+
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=news_str,
+    )
+
+    response.stream_to_file("news.mp3")
