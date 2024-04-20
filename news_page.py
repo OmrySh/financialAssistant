@@ -42,9 +42,10 @@ def show():
         if 'summary' in entry:
             all_entries.append(entry)
     all_entries = all_entries[:num_articles]
-    news_titles = [entry.summary for entry in all_entries]
+    news_summaries = [entry.summary for entry in all_entries]
+    news_titles = [entry.title for entry in all_entries]
 
-    recommender.create_audio_file(news_titles)
+    recommender.create_audio_file(news_titles, news_summaries)
     st.audio("news.mp3", format='audio/mp3')
 
 
@@ -52,7 +53,7 @@ def show():
     if 'relevant_news' not in st.session_state and show_relevant_news:
         username = st.session_state['logged_username']
         user_info = load_user_info(username)
-        list_str = recommender.get_relevant_news(user_info, news_titles)
+        list_str = recommender.get_relevant_news(user_info, news_summaries)
         st.session_state['relevant_news'] = ast.literal_eval(list_str)
 
     if 'news_titles_representation' not in st.session_state:

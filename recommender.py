@@ -112,10 +112,10 @@ def get_relevant_news(user_info, news_titles):
     return response.choices[0].message.content
 
 
-def create_audio_file(news):
+def create_audio_file(news_titles, news_summaries):
     news_str = ""
-    for n in news:
-        news_str += " " + n
+    for title, summary in zip(news_titles, news_summaries):
+        news_str += " " + title + ". " + summary + ". "
 
     response = client.audio.speech.create(
         model="tts-1",
