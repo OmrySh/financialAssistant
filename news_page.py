@@ -34,7 +34,7 @@ def show():
     """, unsafe_allow_html=True)
 
     count = 0
-    num_articles = 5
+    num_articles = 30
     num_relevant = 5
     num_search = 2
     all_entries = []
@@ -45,8 +45,8 @@ def show():
     news_summaries = [entry.summary for entry in all_entries]
     news_titles = [entry.title for entry in all_entries]
 
-    recommender.create_audio_file(news_titles, news_summaries)
-    st.audio("news.mp3", format='audio/mp3')
+    # recommender.create_audio_file(news_titles, news_summaries)
+    # st.audio("news.mp3", format='audio/mp3')
 
 
     show_relevant_news = False
