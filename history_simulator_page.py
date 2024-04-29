@@ -31,8 +31,8 @@ def is_stock_symbol_valid(symbols):
             _ = stock_info.info['shortName']
         except KeyError:
             # If 'shortName' is not in the info, the symbol might be invalid or delisted
-            return False
-    return True
+            return symbol
+    return 1
 
 
 def calc_portfolio_performance(stocks, weights, initial_investment, monthly_savings, start_year):
@@ -86,7 +86,8 @@ def show():
                                                      key=f"weight_{i}_{portfolio}")
                         weights.append(new_weight)
 
-                if is_stock_symbol_valid(stocks):
+                stock_valid_code = is_stock_symbol_valid(stocks)
+                if stock_valid_code == 1:
                     dates, investment = calc_portfolio_performance(stocks, weights, input_initial_investment,
                                                                    input_monthly_savings, input_start_year)
                     # dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
@@ -97,7 +98,7 @@ def show():
                     else:
                         st.session_state['history_graph'][f'portfolio_{portfolio}'] = investment
                 else:
-                    st.error(f"The symbol {input_stock} is invalid or may be delisted. Please enter a valid symbol.")
+                    st.error(f"The symbol {stock_valid_code} is invalid or may be delisted. Please enter a valid symbol.")
 
     with graph_col:
         for portfolio in range(portfolios_number):
