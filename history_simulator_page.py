@@ -113,7 +113,7 @@ def show():
             st.session_state['history_graph']['Savings_Only'] = get_savings_list(input_initial_investment,
                                                                                  input_monthly_savings,
                                                                                  st.session_state['history_graph'][
-                                                                                     'Dates'])
+                                                                                     'Date'])
             saving_only = st.session_state['history_graph']['Savings_Only']
         for portfolio in range(portfolios_number):
             total_investment = "{:,}".format(round(st.session_state['history_graph']
