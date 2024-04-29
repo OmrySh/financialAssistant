@@ -115,14 +115,16 @@ def show():
                                                                                  st.session_state['history_graph'][
                                                                                      'Date'])
             saving_only = st.session_state['history_graph']['Savings_Only']
+        total_saving = "{:,}".format(saving_only[-1])
+        st.write(f"Money Invested Since {input_start_year} Years: {total_saving}")
         for portfolio in range(portfolios_number):
             total_investment = "{:,}".format(round(st.session_state['history_graph']
                                                    [f'portfolio_{portfolio}'][-1]))
 
-            total_saving = "{:,}".format(saving_only[-1])
+
             # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
             st.write(f"portfolio_{portfolio} Value: {total_investment}")
-        # st.write(f"Money Invested During {years} Years: {total_saving}")
+
         # st.write(f"Your Money Earned For You During {years} Years: {money_erned} !!!")
         # savings_df = pd.DataFrame({'Date': st.session_state['history_graph']['Date'],
         #                            'Savings_Only': st.session_state['history_graph']['Investment'],
