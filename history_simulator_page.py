@@ -22,16 +22,17 @@ def calc_investment_graph(initial_investment, monthly_savings, start_year, stock
     return stock_df.index, investment
 
 
-def is_stock_symbol_valid(symbol):
+def is_stock_symbol_valid(symbols):
     """Check if the stock symbol is valid by attempting to fetch its info."""
-    stock_info = yf.Ticker(symbol)
-    try:
-        # Attempt to fetch the short name to determine if symbol is valid
-        _ = stock_info.info['shortName']
-        return True
-    except KeyError:
-        # If 'shortName' is not in the info, the symbol might be invalid or delisted
-        return False
+    for symbol in symbols:
+        stock_info = yf.Ticker(symbol)
+        try:
+            # Attempt to fetch the short name to determine if symbol is valid
+            _ = stock_info.info['shortName']
+        except KeyError:
+            # If 'shortName' is not in the info, the symbol might be invalid or delisted
+            return False
+    return True
 
 
 def calc_portfolio_performance(stocks, weights, initial_investment, monthly_savings, start_year):
@@ -85,7 +86,7 @@ def show():
                                                      key=f"weight_{i}_{portfolio}")
                         weights.append(new_weight)
 
-                if is_stock_symbol_valid(input_stock):
+                if is_stock_symbol_valid(stocks):
                     dates, investment = calc_portfolio_performance(stocks, weights, input_initial_investment,
                                                                    input_monthly_savings, input_start_year)
                     # dates, investment = calc_investment_graph(input_initial_investment, input_monthly_savings,
