@@ -97,6 +97,7 @@ def show():
                                                              f'portfolio_{portfolio}': investment}
                     else:
                         st.session_state['history_graph']['Date'] = dates
+                        st.session_state['history_graph']['Savings_Only'] = investment
                         st.session_state['history_graph'][f'portfolio_{portfolio}'] = investment
                 else:
                     st.error(f"The symbol {stock_valid_code} is invalid or may be delisted. Please enter a valid symbol.")
