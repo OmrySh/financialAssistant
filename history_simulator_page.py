@@ -19,7 +19,7 @@ def calc_investment_graph(initial_investment, monthly_savings, start_year, stock
         current_savings += current_savings * monthly_return + monthly_savings
         investment.append(current_savings)
         prev_close = current_close
-
+    st.write(stock, investment)
     return stock_df.index, investment
 
 
