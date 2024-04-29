@@ -48,6 +48,11 @@ def calc_portfolio_performance(stocks, weights, initial_investment, monthly_savi
 
     return dates, performance
 
+def get_savings_list(initial_investment, monthly_savings, dates):
+    only_monthly_list = [monthly_savings * (i+1) for i in range(len(dates))]
+    savings_list = [monthly + initial_investment for monthly in only_monthly_list]
+    return savings_list
+
 
 
 def show():
@@ -98,17 +103,23 @@ def show():
                                                              f'portfolio_{portfolio}': investment}
                     else:
                         st.session_state['history_graph']['Date'] = dates
-                        st.session_state['history_graph']['Savings_Only'] = investment
                         st.session_state['history_graph'][f'portfolio_{portfolio}'] = investment
                 else:
                     st.error(f"The symbol {stock_valid_code} is invalid or may be delisted. Please enter a valid symbol.")
 
     with graph_col:
+        savings_dict = {}
+        if 'history_graph' in st.session_state and 'Date' in st.session_state['history_graph']:
+            st.session_state['history_graph']['Savings_Only'] = get_savings_list(input_initial_investment,
+                                                                                 input_monthly_savings,
+                                                                                 st.session_state['history_graph'][
+                                                                                     'Dates'])
+            saving_only = st.session_state['history_graph']['Savings_Only']
         for portfolio in range(portfolios_number):
             total_investment = "{:,}".format(round(st.session_state['history_graph']
                                                    [f'portfolio_{portfolio}'][-1]))
 
-            # total_saving = "{:,}".format(saving_only[-1])
+            total_saving = "{:,}".format(saving_only[-1])
             # money_erned = "{:,}".format(round(investment[-1] - saving_only[-1]))
             st.write(f"portfolio_{portfolio} Value: {total_investment}")
         # st.write(f"Money Invested During {years} Years: {total_saving}")
@@ -116,10 +127,12 @@ def show():
         # savings_df = pd.DataFrame({'Date': st.session_state['history_graph']['Date'],
         #                            'Savings_Only': st.session_state['history_graph']['Investment'],
         #                            'Investment': st.session_state['history_graph']['Investment']})
-        savings_dict = {}
+
         for key in st.session_state['history_graph']:
             savings_dict[key] = st.session_state['history_graph'][key]
         savings_df = pd.DataFrame(savings_dict)
 
         # st.line_chart(savings_df, x='Date', y=["Savings Only", "Investment"], height=600)
-        st.line_chart(savings_df, x='Date', y=[f'portfolio_{portfolio}' for portfolio in range(portfolios_number)], height=600)
+        y_list = [f'portfolio_{portfolio}' for portfolio in range(portfolios_number)]
+        y_list.append('Savings_Only')
+        st.line_chart(savings_df, x='Date', y=y_list, height=600)
