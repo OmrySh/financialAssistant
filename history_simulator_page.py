@@ -8,7 +8,7 @@ import os
 def calc_investment_graph(initial_investment, monthly_savings, start_year, stock):
     start_date_str = str(start_year) + "-01-01"
     stock_df = yf.download(stock, start=start_date_str, interval='1mo')
-    current_savings = initial_investment
+    current_savings = initial_investment + monthly_savings
     investment = [current_savings]
     stock_close = np.array(stock_df['Close'])
     prev_close = stock_close[0]
