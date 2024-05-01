@@ -15,11 +15,9 @@ def calc_investment_graph(initial_investment, monthly_savings, start_year, stock
     for i in range(1, len(stock_close)):
         current_close = stock_close[i]
         monthly_return = (current_close - prev_close) / prev_close
-        st.write(stock, monthly_return, stock_df.index[i])
         current_savings += current_savings * monthly_return + monthly_savings
         investment.append(current_savings)
         prev_close = current_close
-    st.write(stock, investment)
     return stock_df.index, investment
 
 
@@ -116,7 +114,7 @@ def show():
                                                                                      'Date'])
             saving_only = st.session_state['history_graph']['Savings_Only']
         total_saving = "{:,}".format(saving_only[-1])
-        st.write(f"Money Invested Since {input_start_year} Years: {total_saving}")
+        st.write(f"Money Invested Since {input_start_year}: {total_saving}")
         for portfolio in range(portfolios_number):
             total_investment = "{:,}".format(round(st.session_state['history_graph']
                                                    [f'portfolio_{portfolio}'][-1]))

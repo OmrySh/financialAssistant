@@ -27,7 +27,7 @@ def get_monthly_spending(expenses_path):
 def calc_investment_graph(monthly_savings, num_months, monthly_interest_rate):
     curr_savings = monthly_savings
     savings_list = [curr_savings]
-    for period in range(1, num_months + 1):
+    for period in range(1, num_months):
         curr_savings = curr_savings * (1 + monthly_interest_rate) + monthly_savings
         savings_list.append(curr_savings)
 
