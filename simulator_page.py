@@ -73,7 +73,7 @@ def show():
 
         # Calculate monthly savings growth
         num_months = years * 12
-        months = np.arange(num_months + 1)
+        months = np.arange(num_months)
         investment = calc_investment_graph(monthly_savings, years * 12, monthly_interest_rate)
         saving_only = [monthly_savings * (i + 1) for i in range(num_months)]
 
