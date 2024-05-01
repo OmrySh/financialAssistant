@@ -75,7 +75,7 @@ def show():
         num_months = years * 12
         months = np.arange(num_months + 1)
         investment = calc_investment_graph(monthly_savings, years * 12, monthly_interest_rate)
-        saving_only = [monthly_savings * (i + 1) for i in range(num_months+1)]
+        saving_only = [monthly_savings * (i + 1) for i in range(num_months)]
 
         total_investment = "{:,}".format(round(investment[-1]))
         total_saving = "{:,}".format(saving_only[-1])
